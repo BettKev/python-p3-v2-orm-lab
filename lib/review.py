@@ -49,16 +49,28 @@ class Review:
         Save the object in local dictionary using table row's PK as dictionary key"""
         pass
 
+    # 1. updated the create method
     @classmethod
     def create(cls, year, summary, employee_id):
         """ Initialize a new Review instance and save the object to the database. Return the new instance. """
-        pass
-   
+        sql = """
+            INSERT INTO reviews (year, summary, employee_id)
+            VALUES (?, ?, ?)
+        """
+        CURSOR.execute(sql, (year, summary, employee_id))
+        CONN.commit()
+        review = cls(year, summary, employee_id, CURSOR.lastrowid)
+        cls.all[review.id] = review
+        return review
+    
+    # 1. updated the instance_from_db method
     @classmethod
     def instance_from_db(cls, row):
         """Return an Review instance having the attribute values from the table row."""
         # Check the dictionary for  existing instance using the row's primary key
-        pass
+        review = cls(row[1], row[2], row[3], row[0])  # Ensure correct order of columns
+        return review
+
    
 
     @classmethod
@@ -75,8 +87,12 @@ class Review:
         delete the dictionary entry, and reassign id attribute"""
         pass
 
+
+    # 1. updated the get all method
     @classmethod
     def get_all(cls):
         """Return a list containing one Review instance per table row"""
-        pass
+        sql = "SELECT * FROM reviews"
+        rows = CURSOR.execute(sql).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
 
