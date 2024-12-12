@@ -80,11 +80,19 @@ class Review:
         review = cls(row[1], row[2], row[3], row[0])  # Ensure correct order of columns
         return review
 
-
+    # 3. Update find_by_id method
     @classmethod
     def find_by_id(cls, id):
-        """Return a Review instance having the attribute values from the table row."""
-        pass
+        """Return a Review instance corresponding to the table row matching the specified primary key."""
+        sql = """
+            SELECT *
+            FROM reviews
+            WHERE id = ?
+        """
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        # If a matching row is found, return an instance of Review; otherwise, return None
+        return cls.instance_from_db(row) if row else None
+
 
     def update(self):
         """Update the table row corresponding to the current Review instance."""
