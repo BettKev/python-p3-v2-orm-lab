@@ -146,3 +146,16 @@ class Review:
         rows = CURSOR.execute(sql).fetchall()
         return [cls.instance_from_db(row) for row in rows]
 
+    # 8. property for summary with validation
+    
+    @property
+    def summary(self):
+        return self._summary
+
+    @summary.setter
+    def summary(self, value):
+        if not isinstance(value, str):
+            raise ValueError("Summary must be a string")
+        if len(value.strip()) == 0:
+            raise ValueError("Summary cannot be empty")
+        self._summary = value
