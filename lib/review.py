@@ -43,11 +43,20 @@ class Review:
         CURSOR.execute(sql)
         CONN.commit()
 
+    # 2. immplemented save method
     def save(self):
-        """ Insert a new row with the year, summary, and employee id values of the current Review object.
-        Update object id attribute using the primary key value of new row.
-        Save the object in local dictionary using table row's PK as dictionary key"""
-        pass
+        """Insert a new row with the year, summary, and employee id values of the current Review object.
+        Update object id attribute using the primary key value of the new row.
+        Save the object in the local dictionary using the row's primary key as the dictionary key."""
+        sql = """
+            INSERT INTO reviews (year, summary, employee_id)
+            VALUES (?, ?, ?)
+        """
+        CURSOR.execute(sql, (self.year, self.summary, self.employee_id))
+        CONN.commit()
+        self.id = CURSOR.lastrowid
+        type(self).all[self.id] = self
+
 
     # 1. updated the create method
     @classmethod
@@ -71,7 +80,6 @@ class Review:
         review = cls(row[1], row[2], row[3], row[0])  # Ensure correct order of columns
         return review
 
-   
 
     @classmethod
     def find_by_id(cls, id):
