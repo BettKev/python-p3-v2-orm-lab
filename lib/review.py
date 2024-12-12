@@ -93,10 +93,17 @@ class Review:
         # If a matching row is found, return an instance of Review; otherwise, return None
         return cls.instance_from_db(row) if row else None
 
-
+# 4.fixed the update method
     def update(self):
         """Update the table row corresponding to the current Review instance."""
-        pass
+        sql = """
+            UPDATE reviews
+            SET year = ?, summary = ?, employee_id = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.year, self.summary, self.employee_id, self.id))
+        CONN.commit()
+
 
     def delete(self):
         """Delete the table row corresponding to the current Review instance,
