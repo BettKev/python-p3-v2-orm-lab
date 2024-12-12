@@ -29,6 +29,9 @@ class Review:
     def year(self, value):
         if not isinstance(value, int):
             raise ValueError("Year must be an integer")
+        # 7. Added validation rule
+        if value < 2000:
+                raise ValueError("Year must be greater than or equal to 2000")
         self._year = value
 
     @classmethod
