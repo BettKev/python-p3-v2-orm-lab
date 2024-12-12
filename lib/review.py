@@ -159,3 +159,19 @@ class Review:
         if len(value.strip()) == 0:
             raise ValueError("Summary cannot be empty")
         self._summary = value
+
+    # 9. employee_id property with validation
+    @property
+    def employee_id(self):
+        return self._employee_id
+
+    @employee_id.setter
+    def employee_id(self, value):
+        if not isinstance(value, int):
+            raise ValueError("Employee ID must be an integer")
+        # Check if the employee_id exists in the Employee table
+        sql = "SELECT id FROM employees WHERE id = ?"
+        result = CURSOR.execute(sql, (value,)).fetchone()
+        if not result:
+            raise ValueError(f"Employee ID {value} does not exist in the database")
+        self._employee_id = value
