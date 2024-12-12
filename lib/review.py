@@ -20,6 +20,17 @@ class Review:
             + f"Employee: {self.employee_id}>"
         )
 
+    # 6. Setting year property with validation
+    @property
+    def year(self):
+        return self._year
+    # 6. Validating the year property
+    @year.setter
+    def year(self, value):
+        if not isinstance(value, int):
+            raise ValueError("Year must be an integer")
+        self._year = value
+
     @classmethod
     def create_table(cls):
         """ Create a new table to persist the attributes of Review instances """
