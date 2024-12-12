@@ -104,11 +104,24 @@ class Review:
         CURSOR.execute(sql, (self.year, self.summary, self.employee_id, self.id))
         CONN.commit()
 
-
+# 5. Fixed the delete method
     def delete(self):
         """Delete the table row corresponding to the current Review instance,
-        delete the dictionary entry, and reassign id attribute"""
-        pass
+        delete the dictionary entry, and reassign id attribute."""
+        sql = """
+            DELETE FROM reviews
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+        
+        # Remove the instance from the local dictionary
+        if self.id in type(self).all:
+            del type(self).all[self.id]
+        
+        # Reset the id attribute to None
+        self.id = None
+
 
 
     # 1. updated the get all method
